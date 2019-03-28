@@ -1,0 +1,15 @@
+datafile<-"/Users/riddhimab/downloads/household_power_consumption.txt"
+data<-read.table(datafile,header=TRUE,sep=";",stringsAsFactors = FALSE
+                 ,dec=".",comment.char = "",quote = '\"')
+subsetofdata<-subset(data,data$Date=="1/2/2007"| data$Date=="2/2/2007")
+subsetofdata$Date<-as.Date(subsetofdata$Date,format =" %d/%m/%Y")
+subsetofdata$Time<-strptime(subsetofdata$Time,format =" %H:%M:%S")
+png("plot3.png",width=480,height=480)
+subsetofdata[1:1440,"Time"]<-format(subsetofdata[1:1440,"Time"],"2007-02-01 %H:%M:%S")
+subsetofdata[1440:2880,"Time"]<-format(subsetofdata[1440:2880,"Time"],"2007-02-02 %H:%M:%S")
+plot(subsetofdata$Time,subsetofdata$Sub_metering_1,type="n",xlab="",ylab="Energy sub metering")
+with(subsetofdata,lines(Time,as.numeric(as.character(Sub_metering_1))))
+with(subsetofdata,lines(Time,as.numeric(as.character(Sub_metering_2)),col="red"))
+with(subsetofdata,lines(Time,as.numeric(as.character(Sub_metering_3)),col="blue"))
+legend("topright",lty = 1,col=c("black","red","blue"),legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+title(main="Energy sub-metering")
